@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">مسابقة القهراوية</title>
+    <title id="pageTitle">مسابقة</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/png" href="cairo.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -678,29 +678,23 @@
             .card {
                 padding: 28px;
             }
-
             h1 {
                 font-size: 2.2rem;
             }
-
             h2 {
                 font-size: 1.35rem;
             }
-
             .question-header {
                 flex-direction: column;
                 gap: 12px;
                 align-items: flex-start;
             }
-
             .timer {
                 align-self: flex-end;
             }
-
             .score-number {
                 font-size: 3.5rem;
             }
-
             .result-row {
                 flex-direction: column;
                 gap: 8px;
@@ -714,29 +708,24 @@
             .sync-indicator {
                 display: none;
             }
-
             body {
                 background: white;
                 color: black;
             }
-
             .card {
                 box-shadow: none;
                 border: 2px solid #8a2be2;
                 background: white;
             }
-
             .print-button,
             .congrats-message,
             .btn {
                 display: none !important;
             }
-
             .result-print-area {
                 border: 2px solid #8a2be2;
                 background: white;
             }
-
             .result-label,
             .result-value {
                 color: black;
@@ -747,12 +736,12 @@
 <body>
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-spinner"></div>
-        <div class="loading-text">🔥 جاري التحميل...</div>
+        <div class="loading-text">🔥 جاري الإتصال بلوحة التحكم...</div>
     </div>
 
     <div class="sync-indicator" id="syncIndicator">
         <div class="sync-pulse"></div>
-        <span>متصل بلوحة التحكم</span>
+        <span>تم تحديث البيانات</span>
     </div>
 
     <div class="progress-bar-container" id="progressBarContainer">
@@ -765,30 +754,30 @@
                 <div class="congrats-icon">🔒</div>
                 <h2>المسابقة مغلقة</h2>
                 <p class="subtitle">Quiz is Closed</p>
-                <div class="alert-box">
-                    <p>المسابقة متاحة فقط من الساعة 10:00 مساءً إلى 10:30 مساءً</p>
-                    <p style="margin-top: 10px;">The quiz is only available from 10:00 PM to 10:30 PM</p>
+                <div class="alert-box" id="timeLockedMessage">
+                    <p>المسابقة مغلقة حالياً من قبل المشرف.</p>
+                    <p style="margin-top: 10px;">The quiz is currently closed by the administrator.</p>
                 </div>
             </div>
         </div>
 
         <div class="card hidden" id="landingScreen">
             <div class="header">
-                <h1 id="quizTitle">مسابقة القهراوية</h1>
-                <p class="subtitle" id="quizSubtitle">Cairo Knowledge Quiz</p>
+                <h1 id="quizTitle">مسابقة</h1>
+                <p class="subtitle" id="quizSubtitle">Quiz Subtitle</p>
             </div>
             
             <form id="registrationForm">
                 <div class="form-group">
                     <label for="accessCode">كود الدخول / Access Code</label>
                     <input type="text" id="accessCode" required placeholder="أدخل كود الدخول">
-                    <div class="error-message" id="codeError">Please enter a valid code</div>
+                    <div class="error-message" id="codeError">الرجاء إدخال كود صالح</div>
                 </div>
 
                 <div class="form-group">
                     <label for="candidateName">الاسم / Name</label>
                     <input type="text" id="candidateName" required autocomplete="name">
-                    <div class="error-message" id="nameError">Please enter your name</div>
+                    <div class="error-message" id="nameError">الرجاء إدخال اسمك</div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary" id="startBtn">ابدأ الاختبار / Start Exam</button>
@@ -797,10 +786,10 @@
 
         <div class="card hidden" id="questionScreen">
             <div class="question-header">
-                <div class="question-counter" id="questionCounter">Question 1 / 10</div>
+                <div class="question-counter" id="questionCounter"></div>
                 <div class="timer" id="timer">
                     <span>⏱</span>
-                    <span id="timeRemaining">10</span>
+                    <span id="timeRemaining">15</span>
                 </div>
             </div>
             
@@ -849,9 +838,8 @@
 
                 <button class="btn btn-primary print-button" onclick="window.print()">طباعة النتيجة / Print Result 🖨️</button>
 
-                <div class="success-box" id="saveStatus">جاري حفظ النتيجة... / Saving results...</div>
-                <p class="congrats-message">شكراً لمشاركتك في المسابقة!</p>
-                <p class="congrats-message">Thank you for participating!</p>
+                <div class="success-box" id="saveStatus">جاري حفظ النتيجة...</div>
+                <p class="congrats-message">شكراً لمشاركتك!</p>
             </div>
         </div>
 
@@ -860,13 +848,12 @@
                 <div class="congrats-icon">⚠️</div>
                 <h2>كود غير صالح</h2>
                 <p class="subtitle">Invalid or Used Code</p>
-                <div class="alert-box" id="codeErrorMessage">هذا الكود غير صالح أو تم استخدامه بالفعل<br>This code is invalid or has already been used</div>
+                <div class="alert-box" id="codeErrorMessage"></div>
                 <button class="btn btn-primary" onclick="returnToHome()">العودة للبداية / Return to Home</button>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, get, set, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
@@ -876,7 +863,7 @@
             authDomain: "el-qaheraweya.firebaseapp.com",
             databaseURL: "https://el-qaheraweya-default-rtdb.firebaseio.com",
             projectId: "el-qaheraweya",
-            storageBucket: "el-qaheraweya.firebasestorage.app",
+            storageBucket: "el-qaheraweya.appspot.com",
             messagingSenderId: "380945019833",
             appId: "1:380945019833:web:24f293bade8ea5ffdcfc68",
             measurementId: "G-9W4QNTF5CK"
@@ -889,20 +876,16 @@
 
         console.log('🔥 Firebase initialized successfully!');
         
+        // This global function call will be defined in the next script tag
         loadQuizApp();
     </script>
 
     <script>
-        const CONFIG = {
-            QUIZ_START_HOUR: 0,
-            QUIZ_START_MINUTE: 0,
-            QUIZ_END_HOUR: 23,
-            QUIZ_END_MINUTE: 59,
-        };
-
-        let QUESTIONS = [];
-        let ORGANIZATION = {};
-        let ACCESS_CODES = [];
+        // ==================== GLOBAL STATE & REFERENCES ====================
+        let ALL_QUESTIONS = []; // Stores the original list of questions from Firebase
+        let QUESTIONS = [];     // Stores the shuffled questions for the current user
+        let ACCESS_CODES = {};  // Stores access codes as an object for fast lookups
+        let QUIZ_STATE = { isActive: false }; // Default to closed until Firebase confirms otherwise
 
         let state = {
             accessCode: '',
@@ -910,15 +893,17 @@
             currentQuestionIndex: 0,
             score: 0,
             timer: null,
-            timeRemaining: 10,
+            timeRemaining: 15,
             answers: [],
             isValidating: false
         };
 
         const elements = {
             loadingScreen: document.getElementById('loadingScreen'),
+            loadingText: document.querySelector('.loading-text'),
             syncIndicator: document.getElementById('syncIndicator'),
             timeLockedScreen: document.getElementById('timeLockedScreen'),
+            timeLockedMessage: document.getElementById('timeLockedMessage'),
             landingScreen: document.getElementById('landingScreen'),
             questionScreen: document.getElementById('questionScreen'),
             congratsScreen: document.getElementById('congratsScreen'),
@@ -941,191 +926,172 @@
             printCode: document.getElementById('printCode'),
             printScore: document.getElementById('printScore'),
             printPercentage: document.getElementById('printPercentage'),
-            printDateTime: document.getElementById('printDateTime')
+            printDateTime: document.getElementById('printDateTime'),
+            codeErrorMessage: document.getElementById('codeErrorMessage')
         };
 
+        // ==================== INITIALIZATION & DATA LOADING ====================
         async function loadQuizApp() {
             try {
-                await loadQuestionsFromFirebase();
-                await loadOrganizationFromFirebase();
-                await loadAccessCodesFromFirebase();
+                await Promise.all([
+                    loadQuizStateFromFirebase(),
+                    loadOrganizationFromFirebase(),
+                    loadQuestionsFromFirebase(),
+                    loadAccessCodesFromFirebase()
+                ]);
                 
                 setupRealtimeListeners();
                 
-                elements.loadingScreen.style.display = 'none';
+                elements.loadingScreen.classList.add('hidden');
                 updateScreenVisibility();
                 
                 console.log('✅ Quiz app loaded successfully');
-                showSyncIndicator();
+                
             } catch (error) {
                 console.error('❌ Error loading quiz:', error);
-                elements.loadingScreen.style.display = 'none';
-                alert('حدث خطأ في تحميل المسابقة / Error loading quiz');
+                elements.loadingText.textContent = 'حدث خطأ في تحميل المسابقة';
             }
+        }
+
+        async function loadFromFirebase(path) {
+            const { database, ref, get } = window.firebaseDB;
+            const snapshot = await get(ref(database, path));
+            return snapshot.exists() ? snapshot.val() : null;
+        }
+
+        async function loadQuizStateFromFirebase() {
+            const data = await loadFromFirebase('quizState');
+            if (data) QUIZ_STATE = data;
         }
 
         async function loadQuestionsFromFirebase() {
-            const { database, ref, get } = window.firebaseDB;
-            const snapshot = await get(ref(database, 'questions'));
-            
-            if (snapshot.exists()) {
-                QUESTIONS = Object.values(snapshot.val());
-                console.log('✅ Questions loaded:', QUESTIONS.length);
-            } else {
-                QUESTIONS = [
-                    { id: 1, text: "إكليسيا تعني:", choices: ["جماعة", "بيت", "مكان"], correctChoice: 0, timeout: 15 },
-                    { id: 2, text: "كام مرة وردت كلمة كنيسة في الكتاب المقدس؟", choices: ["72", "80", "77"], correctChoice: 2, timeout: 15 },
-                    { id: 3, text: "من رموز الكنيسة", choices: ["فلك نوح", "المدينة المقدسة", "الاثنين معا"], correctChoice: 2, timeout: 15 }
-                ];
-            }
+            const data = await loadFromFirebase('questions');
+            if (data) ALL_QUESTIONS = Object.values(data);
         }
 
         async function loadOrganizationFromFirebase() {
-            const { database, ref, get } = window.firebaseDB;
-            const snapshot = await get(ref(database, 'organization'));
-            
-            if (snapshot.exists()) {
-                ORGANIZATION = snapshot.val();
-                
-                if (ORGANIZATION.name) {
-                    document.getElementById('quizTitle').textContent = ORGANIZATION.name;
-                    document.getElementById('pageTitle').textContent = ORGANIZATION.name;
-                }
-                
-                if (ORGANIZATION.description) {
-                    document.getElementById('quizSubtitle').textContent = ORGANIZATION.description;
-                }
-                
-                console.log('✅ Organization loaded');
-            }
+            const data = await loadFromFirebase('organization');
+            if (data) updateOrganizationUI(data);
         }
 
         async function loadAccessCodesFromFirebase() {
-            const { database, ref, get } = window.firebaseDB;
-            const snapshot = await get(ref(database, 'accessCodes'));
-            
-            if (snapshot.exists()) {
-                ACCESS_CODES = Object.values(snapshot.val());
-                console.log('✅ Access codes loaded:', ACCESS_CODES.length);
-            }
+            const data = await loadFromFirebase('accessCodes');
+            if (data) ACCESS_CODES = data;
         }
 
+        // ==================== REAL-TIME LISTENERS ====================
         function setupRealtimeListeners() {
             const { database, ref, onValue } = window.firebaseDB;
-            
-            onValue(ref(database, 'questions'), (snapshot) => {
+
+            onValue(ref(database, 'quizState'), (snapshot) => {
                 if (snapshot.exists()) {
-                    QUESTIONS = Object.values(snapshot.val());
-                    console.log('🔄 Questions updated:', QUESTIONS.length);
-                    showSyncIndicator();
+                    const wasActive = QUIZ_STATE.isActive;
+                    QUIZ_STATE = snapshot.val();
+                    if (wasActive !== QUIZ_STATE.isActive) {
+                        updateScreenVisibility();
+                        showSyncIndicator();
+                    }
                 }
             });
-            
+
+            onValue(ref(database, 'questions'), (snapshot) => {
+                if (snapshot.exists()) ALL_QUESTIONS = Object.values(snapshot.val());
+            });
+
             onValue(ref(database, 'organization'), (snapshot) => {
-                if (snapshot.exists()) {
-                    ORGANIZATION = snapshot.val();
-                    
-                    if (ORGANIZATION.name) {
-                        document.getElementById('quizTitle').textContent = ORGANIZATION.name;
-                        document.getElementById('pageTitle').textContent = ORGANIZATION.name;
-                    }
-                    
-                    if (ORGANIZATION.description) {
-                        document.getElementById('quizSubtitle').textContent = ORGANIZATION.description;
-                    }
-                    
-                    console.log('🔄 Organization updated');
-                    showSyncIndicator();
-                }
+                if (snapshot.exists()) updateOrganizationUI(snapshot.val());
             });
             
             onValue(ref(database, 'accessCodes'), (snapshot) => {
-                if (snapshot.exists()) {
-                    ACCESS_CODES = Object.values(snapshot.val());
-                    console.log('🔄 Access codes updated');
-                }
+                if (snapshot.exists()) ACCESS_CODES = snapshot.val();
             });
+        }
+        
+        // ==================== UI UPDATE FUNCTIONS ====================
+        function updateOrganizationUI(orgData) {
+            if (orgData.name) {
+                document.getElementById('quizTitle').textContent = orgData.name;
+                document.getElementById('pageTitle').textContent = orgData.name;
+            }
+            if (orgData.description) {
+                document.getElementById('quizSubtitle').textContent = orgData.description;
+            }
+        }
+
+        function updateScreenVisibility() {
+            const allScreens = [elements.timeLockedScreen, elements.landingScreen, elements.questionScreen, elements.congratsScreen, elements.invalidCodeScreen];
+            allScreens.forEach(screen => screen.classList.add('hidden'));
+
+            if (QUIZ_STATE.isActive) {
+                elements.landingScreen.classList.remove('hidden');
+            } else {
+                elements.timeLockedScreen.classList.remove('hidden');
+            }
         }
 
         function showSyncIndicator() {
             elements.syncIndicator.classList.add('active');
-            setTimeout(() => {
-                elements.syncIndicator.classList.remove('active');
-            }, 3000);
+            setTimeout(() => elements.syncIndicator.classList.remove('active'), 3000);
         }
 
-        function checkTimeAccess() {
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            
-            const startTime = CONFIG.QUIZ_START_HOUR * 60 + CONFIG.QUIZ_START_MINUTE;
-            const endTime = CONFIG.QUIZ_END_HOUR * 60 + CONFIG.QUIZ_END_MINUTE;
-            const currentTime = currentHour * 60 + currentMinute;
-            
-            return (currentTime >= startTime && currentTime <= endTime);
-        }
-
-        function updateScreenVisibility() {
-            if (checkTimeAccess()) {
-                elements.timeLockedScreen.classList.add('hidden');
-                elements.landingScreen.classList.remove('hidden');
-            } else {
-                elements.timeLockedScreen.classList.remove('hidden');
-                elements.landingScreen.classList.add('hidden');
-                elements.questionScreen.classList.add('hidden');
-                elements.congratsScreen.classList.add('hidden');
-                elements.invalidCodeScreen.classList.add('hidden');
+        // ==================== CORE QUIZ LOGIC ====================
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
+            return array;
         }
-
+        
         async function validateAccessCode(code, name) {
-            const codeObj = ACCESS_CODES.find(c => c.code === code.toUpperCase());
-            
+            const codeKey = code.toUpperCase();
+            const codeObj = ACCESS_CODES[codeKey];
+
             if (!codeObj) {
                 return { valid: false, message: 'كود غير صالح / Invalid code' };
             }
             
             if (codeObj.used) {
-                return { valid: false, message: 'هذا الكود تم استخدامه بالفعل / This code has already been used' };
+                return { valid: false, message: `هذا الكود تم استخدامه بالفعل بواسطة: ${codeObj.usedBy || 'شخص آخر'}` };
             }
             
-            const codeIndex = ACCESS_CODES.findIndex(c => c.code === code.toUpperCase());
-            if (codeIndex !== -1) {
-                ACCESS_CODES[codeIndex].used = true;
-                ACCESS_CODES[codeIndex].usedBy = name;
-                ACCESS_CODES[codeIndex].usedAt = new Date().toISOString();
-                
+            try {
                 const { database, ref, set } = window.firebaseDB;
-                await set(ref(database, `accessCodes/${codeIndex}`), ACCESS_CODES[codeIndex]);
+                const updates = {
+                    ...codeObj,
+                    used: true,
+                    usedBy: name,
+                    usedAt: new Date().toISOString()
+                };
+                await set(ref(database, `accessCodes/${codeKey}`), updates);
+                return { valid: true };
+            } catch (error) {
+                console.error("Error updating access code:", error);
+                return { valid: false, message: "خطأ في الاتصال بقاعدة البيانات" };
             }
-            
-            return { valid: true };
         }
 
         elements.registrationForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             if (state.isValidating) return;
-            state.isValidating = true;
-            elements.startBtn.disabled = true;
-            
-            if (!checkTimeAccess()) {
-                alert('المسابقة متاحة فقط من 10:00 مساءً إلى 10:30 مساءً\nThe quiz is only available from 10:00 PM to 10:30 PM');
-                state.isValidating = false;
-                elements.startBtn.disabled = false;
+
+            if (!QUIZ_STATE.isActive) {
+                alert('المسابقة مغلقة الآن.');
+                updateScreenVisibility();
                 return;
             }
             
-            const code = document.getElementById('accessCode').value.trim().toUpperCase();
+            state.isValidating = true;
+            elements.startBtn.disabled = true;
+
+            const code = document.getElementById('accessCode').value.trim();
             const name = document.getElementById('candidateName').value.trim();
-            
-            let valid = true;
-            
+            let hasError = false;
+
             if (!code) {
                 document.getElementById('accessCode').classList.add('error');
                 document.getElementById('codeError').classList.add('show');
-                valid = false;
+                hasError = true;
             } else {
                 document.getElementById('accessCode').classList.remove('error');
                 document.getElementById('codeError').classList.remove('show');
@@ -1134,13 +1100,13 @@
             if (!name) {
                 document.getElementById('candidateName').classList.add('error');
                 document.getElementById('nameError').classList.add('show');
-                valid = false;
+                hasError = true;
             } else {
                 document.getElementById('candidateName').classList.remove('error');
                 document.getElementById('nameError').classList.remove('show');
             }
             
-            if (!valid) {
+            if (hasError) {
                 state.isValidating = false;
                 elements.startBtn.disabled = false;
                 return;
@@ -1149,28 +1115,27 @@
             const validation = await validateAccessCode(code, name);
             
             if (!validation.valid) {
-                document.getElementById('codeErrorMessage').innerHTML = validation.message;
+                elements.codeErrorMessage.innerHTML = validation.message;
                 elements.landingScreen.classList.add('hidden');
                 elements.invalidCodeScreen.classList.remove('hidden');
-                state.isValidating = false;
-                elements.startBtn.disabled = false;
-                return;
+            } else {
+                state.accessCode = code.toUpperCase();
+                state.candidateName = name;
+                startExam();
             }
 
-            state.accessCode = code;
-            state.candidateName = name;
             state.isValidating = false;
-            
-            startExam();
+            elements.startBtn.disabled = false;
         });
 
         function startExam() {
-            if (QUESTIONS.length === 0) {
-                alert('لا توجد أسئلة متاحة حالياً / No questions available');
-                elements.startBtn.disabled = false;
+            if (ALL_QUESTIONS.length === 0) {
+                alert('لا توجد أسئلة متاحة حالياً.');
                 return;
             }
             
+            QUESTIONS = shuffleArray([...ALL_QUESTIONS]);
+
             elements.landingScreen.classList.add('hidden');
             elements.questionScreen.classList.remove('hidden');
             elements.progressBarContainer.classList.add('active');
@@ -1180,11 +1145,11 @@
             showQuestion(0);
         }
 
+        // ==================== QUESTION & ANSWER LOGIC ====================
         function handleBeforeUnload(e) {
-            if (!elements.congratsScreen.classList.contains('hidden')) return;
-            
+            if (elements.questionScreen.classList.contains('hidden')) return;
             e.preventDefault();
-            e.returnValue = 'هل أنت متأكد أنك تريد المغادرة؟ / Are you sure you want to leave?';
+            e.returnValue = 'هل أنت متأكد أنك تريد المغادرة؟ سيتم فقدان تقدمك.';
             return e.returnValue;
         }
 
@@ -1197,63 +1162,41 @@
             state.currentQuestionIndex = index;
             const question = QUESTIONS[index];
             
-            elements.questionCounter.textContent = `Question ${index + 1} / ${QUESTIONS.length}`;
+            elements.questionCounter.textContent = `السؤال ${index + 1} / ${QUESTIONS.length}`;
             elements.questionText.textContent = question.text;
             
-            if (question.image) {
-                elements.questionImage.src = question.image;
-                elements.questionImage.classList.remove('hidden');
-            } else {
-                elements.questionImage.classList.add('hidden');
-            }
+            elements.questionImage.classList.toggle('hidden', !question.image);
+            if (question.image) elements.questionImage.src = question.image;
             
             updateProgressBar();
             
             elements.choices.innerHTML = '';
-            
             question.choices.forEach((choice, i) => {
-                const choiceDiv = document.createElement('div');
-                choiceDiv.className = 'choice';
-                
-                const input = document.createElement('input');
-                input.type = 'radio';
-                input.name = 'answer';
-                input.id = `choice${i}`;
-                input.value = i;
-                
-                const label = document.createElement('label');
-                label.htmlFor = `choice${i}`;
-                label.textContent = choice;
-                
-                choiceDiv.appendChild(input);
-                choiceDiv.appendChild(label);
-                elements.choices.appendChild(choiceDiv);
-                
-                input.addEventListener('change', () => handleAnswerSelection(i));
+                elements.choices.innerHTML += `
+                    <div class="choice">
+                        <input type="radio" name="answer" id="choice${i}" value="${i}">
+                        <label for="choice${i}">${choice}</label>
+                    </div>`;
+            });
+
+            document.querySelectorAll('input[name="answer"]').forEach(input => {
+                input.addEventListener('change', () => handleAnswerSelection(parseInt(input.value)));
             });
             
             startTimer(question.timeout || 15);
         }
 
         function startTimer(timeout) {
+            if (state.timer) clearInterval(state.timer);
             state.timeRemaining = timeout;
             elements.timeRemaining.textContent = state.timeRemaining;
             elements.timer.classList.remove('warning');
             
-            if (state.timer) clearInterval(state.timer);
-            
             state.timer = setInterval(() => {
                 state.timeRemaining--;
                 elements.timeRemaining.textContent = state.timeRemaining;
-                
-                if (state.timeRemaining <= 5) {
-                    elements.timer.classList.add('warning');
-                }
-                
-                if (state.timeRemaining <= 0) {
-                    clearInterval(state.timer);
-                    handleTimeout();
-                }
+                if (state.timeRemaining <= 5) elements.timer.classList.add('warning');
+                if (state.timeRemaining <= 0) handleTimeout();
             }, 1000);
         }
 
@@ -1263,88 +1206,41 @@
             const question = QUESTIONS[state.currentQuestionIndex];
             const isCorrect = choiceIndex === question.correctChoice;
             
+            if (isCorrect) state.score++;
+            
             state.answers.push({
                 questionId: question.id,
                 selectedChoice: choiceIndex,
-                correct: isCorrect,
-                questionText: question.text,
-                selectedAnswer: question.choices[choiceIndex],
-                correctAnswer: question.choices[question.correctChoice]
+                correct: isCorrect
             });
             
-            if (isCorrect) {
-                state.score++;
-            }
-            
-            setTimeout(() => {
-                showQuestion(state.currentQuestionIndex + 1);
-            }, 500);
+            setTimeout(() => showQuestion(state.currentQuestionIndex + 1), 400);
         }
 
         function handleTimeout() {
+            clearInterval(state.timer);
             const question = QUESTIONS[state.currentQuestionIndex];
             state.answers.push({
                 questionId: question.id,
                 selectedChoice: null,
-                correct: false,
-                timeout: true,
-                questionText: question.text,
-                selectedAnswer: 'No Answer',
-                correctAnswer: question.choices[question.correctChoice]
+                correct: false
             });
-            
             showQuestion(state.currentQuestionIndex + 1);
         }
 
         function updateProgressBar() {
-            const progress = ((state.currentQuestionIndex + 1) / QUESTIONS.length) * 100;
+            const progress = ((state.currentQuestionIndex) / QUESTIONS.length) * 100;
             elements.progressBar.style.width = `${progress}%`;
         }
 
-        function formatDateTime() {
-            const now = new Date();
-            const options = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric', 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: true
-            };
-            return now.toLocaleDateString('ar-EG', options);
-        }
-
-        async function saveResultToFirebase() {
-            try {
-                const newResult = {
-                    id: Date.now(),
-                    name: state.candidateName,
-                    code: state.accessCode,
-                    score: state.score,
-                    total: QUESTIONS.length,
-                    percentage: Math.round((state.score / QUESTIONS.length) * 100),
-                    answers: state.answers,
-                    date: new Date().toISOString()
-                };
-                
-                const { database, ref, set } = window.firebaseDB;
-                await set(ref(database, `results/${newResult.id}`), newResult);
-                
-                console.log('✅ Result saved to Firebase');
-                return true;
-            } catch (error) {
-                console.error('❌ Error saving result:', error);
-                return false;
-            }
-        }
-
+        // ==================== FINISH & SAVE LOGIC ====================
         async function finishExam() {
             clearInterval(state.timer);
             window.removeEventListener('beforeunload', handleBeforeUnload);
             
-            const percentage = Math.round((state.score / QUESTIONS.length) * 100);
+            const percentage = Math.round((state.score / QUESTIONS.length) * 100) || 0;
             const scoreText = `${state.score} / ${QUESTIONS.length}`;
-            const dateTime = formatDateTime();
+            const dateTime = new Date().toLocaleString('ar-EG');
             
             elements.finalScoreNumber.textContent = state.score;
             elements.finalScoreDetails.textContent = scoreText;
@@ -1362,59 +1258,56 @@
             
             const saved = await saveResultToFirebase();
             if (saved) {
-                elements.saveStatus.innerHTML = '✅ تم حفظ النتيجة بنجاح!<br>Results saved successfully!';
-                elements.saveStatus.classList.remove('alert-box');
+                elements.saveStatus.innerHTML = '✅ تم حفظ النتيجة بنجاح!';
                 elements.saveStatus.classList.add('success-box');
             } else {
-                elements.saveStatus.innerHTML = '⚠️ فشل حفظ النتيجة<br>Failed to save results';
-                elements.saveStatus.classList.add('alert-box');
+                elements.saveStatus.innerHTML = '⚠️ فشل حفظ النتيجة. يرجى أخذ لقطة شاشة.';
                 elements.saveStatus.classList.remove('success-box');
+                elements.saveStatus.classList.add('alert-box');
             }
+        }
+
+        async function saveResultToFirebase() {
+            try {
+                const resultId = Date.now();
+                const newResult = {
+                    id: resultId,
+                    name: state.candidateName,
+                    code: state.accessCode,
+                    score: state.score,
+                    total: QUESTIONS.length,
+                    percentage: Math.round((state.score / QUESTIONS.length) * 100) || 0,
+                    answers: state.answers,
+                    date: new Date().toISOString()
+                };
+                
+                const { database, ref, set } = window.firebaseDB;
+                await set(ref(database, `results/${resultId}`), newResult);
+                console.log('✅ Result saved to Firebase');
+                return true;
+            } catch (error) {
+                console.error('❌ Error saving result:', error);
+                return false;
+            }
+        }
+
+        // ==================== HELPERS & UTILITIES ====================
+        function returnToHome() {
+            window.location.reload();
         }
 
         document.addEventListener('keydown', (e) => {
             if (elements.questionScreen.classList.contains('hidden')) return;
             
             const choices = document.querySelectorAll('input[name="answer"]');
-            
             if (e.key >= '1' && e.key <= '6') {
                 const index = parseInt(e.key) - 1;
-                if (choices[index]) {
+                if (choices[index] && !choices[index].checked) {
                     choices[index].checked = true;
                     handleAnswerSelection(index);
                 }
             }
         });
-
-        function returnToHome() {
-            document.getElementById('accessCode').value = '';
-            document.getElementById('candidateName').value = '';
-            document.getElementById('accessCode').classList.remove('error');
-            document.getElementById('candidateName').classList.remove('error');
-            document.getElementById('codeError').classList.remove('show');
-            document.getElementById('nameError').classList.remove('show');
-            
-            elements.invalidCodeScreen.classList.add('hidden');
-            elements.congratsScreen.classList.add('hidden');
-            elements.questionScreen.classList.add('hidden');
-            elements.progressBarContainer.classList.remove('active');
-            elements.startBtn.disabled = false;
-            
-            state = {
-                accessCode: '',
-                candidateName: '',
-                currentQuestionIndex: 0,
-                score: 0,
-                timer: null,
-                timeRemaining: 10,
-                answers: [],
-                isValidating: false
-            };
-            
-            updateScreenVisibility();
-        }
-
-        setInterval(updateScreenVisibility, 60000);
     </script>
 </body>
 </html>
